@@ -29,9 +29,17 @@ public sealed class MigrationHostedService : IHostedService
     }
 
     /// <summary>
-    /// Applies pending EF Core migrations with retry logic on startup.
+    /// Applies pending EF Core migrations in the background after the host has started.
+    /// Returns immediately so Kestrel can bind and pass liveness health checks.
     /// </summary>
-    public async Task StartAsync(CancellationToken cancellationToken)
+    public Task StartAsync(CancellationToken cancellationToken)
+    {
+        // Fire and forget — do NOT await here so Kestrel starts immediately
+        _ = Task.Run(() => RunMigrationsAsync(cancellationToken), cancellationToken);
+        return Task.CompletedTask;
+    }
+
+    private async Task RunMigrationsAsync(CancellationToken cancellationToken)
     {
         const int maxRetries = 10;
         const int delaySeconds = 5;
