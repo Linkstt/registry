@@ -1,0 +1,31 @@
+## Build
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+*.user
+*.suo
+*.cache
+*.docuser
+
+## IDE
+.vs/
+.vscode/
+*.swp
+*.sln.docstats
+.idea/
+
+## NuGet
+*.nupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+
+## Environments
+*.env
+appsettings.*.local.json
+
+## OS
+.DS_Store
+Thumbs.db
