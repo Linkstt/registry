@@ -6,6 +6,7 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Registry.Api.Extensions;
 using Registry.Api.Middleware;
+using Registry.Api.Services;
 using Registry.Application.Interfaces;
 using Registry.Application.Services;
 using Registry.Domain.Common;
@@ -79,14 +80,10 @@ try
     // Controllers
     builder.Services.AddControllers();
 
-    var app = builder.Build();
+    // Background migration (runs after host starts, retries until DB is reachable)
+    builder.Services.AddHostedService<MigrationHostedService>();
 
-    // Apply pending migrations
-    await using (var scope = app.Services.CreateAsyncScope())
-    {
-        var db = scope.ServiceProvider.GetRequiredService<RegistryDbContext>();
-        await db.Database.MigrateAsync();
-    }
+    var app = builder.Build();
 
     // Middleware pipeline
     app.UseMiddleware<CorrelationIdMiddleware>();
