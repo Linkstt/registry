@@ -52,41 +52,48 @@ public static class ServiceCollectionExtensions
                         HasAnyCdnPermission(ctx.User, "admin.products.read", "developer.products.read") ||
                         HasScope(ctx.User, "developer") ||
                         HasScope(ctx.User, "admin") ||
-                        HasScope(ctx.User, "store")))
+                        HasScope(ctx.User, "store") ||
+                        HasScope(ctx.User, "registry")))
             .AddPolicy("ProductWrite", policy =>
                 policy.RequireAuthenticatedUser()
                     .RequireAssertion(ctx =>
                         HasAnyCdnPermission(ctx.User, "admin.products.write", "developer.products.create") ||
-                        HasScope(ctx.User, "developer")))
+                        HasScope(ctx.User, "developer") ||
+                        HasScope(ctx.User, "registry")))
             .AddPolicy("VersionRead", policy =>
                 policy.RequireAuthenticatedUser()
                     .RequireAssertion(ctx =>
                         HasAnyCdnPermission(ctx.User, "admin.products.versions.read", "developer.products.read") ||
                         HasScope(ctx.User, "developer") ||
-                        HasScope(ctx.User, "admin")))
+                        HasScope(ctx.User, "admin") ||
+                        HasScope(ctx.User, "registry")))
             .AddPolicy("VersionWrite", policy =>
                 policy.RequireAuthenticatedUser()
                     .RequireAssertion(ctx =>
                         HasAnyCdnPermission(ctx.User, "admin.products.versions.yank", "developer.products.create") ||
-                        HasScope(ctx.User, "developer")))
+                        HasScope(ctx.User, "developer") ||
+                        HasScope(ctx.User, "registry")))
             .AddPolicy("ManifestRead", policy =>
                 policy.RequireAuthenticatedUser()
                     .RequireAssertion(ctx =>
-                        HasPermission(ctx.User, "launcher.sessions.read") ||
+                        HasPermission(ctx.User, "launcher.distribution.manifest") ||
                         HasScope(ctx.User, "license") ||
-                        HasScope(ctx.User, "admin")))
+                        HasScope(ctx.User, "admin") ||
+                        HasScope(ctx.User, "registry")))
             .AddPolicy("CategoryRead", policy =>
                 policy.RequireAuthenticatedUser())
             .AddPolicy("AssetWrite", policy =>
                 policy.RequireAuthenticatedUser()
                     .RequireAssertion(ctx =>
                         HasAnyCdnPermission(ctx.User, "developer.products.create", "admin.products.write") ||
-                        HasScope(ctx.User, "developer")))
+                        HasScope(ctx.User, "developer") ||
+                        HasScope(ctx.User, "registry")))
             .AddPolicy("AdminOnly", policy =>
                 policy.RequireAuthenticatedUser()
                     .RequireAssertion(ctx =>
                         HasPermission(ctx.User, "admin.products.write") ||
-                        HasScope(ctx.User, "admin")));
+                        HasScope(ctx.User, "admin") ||
+                        HasScope(ctx.User, "registry")));
 
         return services;
     }
